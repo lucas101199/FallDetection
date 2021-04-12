@@ -4,8 +4,8 @@ import pandas as pd
 
 
 allfiles = [f for f in listdir("UMAFall_Dataset") if isfile(join("UMAFall_Dataset", f))]
-clean_file = []
-features = "TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID\n"
+"""
+features = "TimeStamp;Sample No;X-Axis;Y-Axis;Z-Axis;Sensor_Type;Sensor_ID\n"
 for f in allfiles:
     file = open(join("UMAFall_Dataset", f), "r")
     lines = file.readlines()
@@ -22,6 +22,7 @@ for f in allfiles:
 """
 for f in allfiles[:2]:
     with open(join("UMAFall_Dataset", f)) as csv_file:
-        data = pd.read_csv(join("UMAFall_Dataset", f))
-        data[6] =
-"""
+        df = pd.read_csv(join("UMAFall_Dataset", f), sep=';', header=0)
+        df = df[df.Sensor_ID == 3]
+        df = df[df.Sensor_Type != 2]
+        print(df)
