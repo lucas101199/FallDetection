@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import tensorflow as tf
-from keras.layers import SimpleRNN
 from tensorflow.keras import layers
 
 
@@ -22,6 +21,7 @@ model = tf.keras.Sequential([
     layers.Dense(64),
     layers.Dense(1)
 ])
+
 model.compile(loss=tf.losses.MeanSquaredError(), optimizer=tf.optimizers.Adam())
 
 model.fit(np.array(data_not), np.array(labels), epochs=2)
