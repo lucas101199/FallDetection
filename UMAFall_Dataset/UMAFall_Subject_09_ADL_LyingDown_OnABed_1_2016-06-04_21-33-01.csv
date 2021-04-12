@@ -1,44 +1,4 @@
-% Universidad de Malaga - ETSI de Telecomunicacion (Spain)                         
-% Date: 2016-06-04_21:33:01                                                        
-% ID: Subject_09_ADL_LyingDown_OnABed_1                                            
-% Name: Subject_09                                                                 
-% Age: 55                                                                          
-% Height(cm): 170                                                                  
-% Weight(Kg): 83                                                                   
-% Gender: M                                                                        
-                                                                                    
-% Type of Movement: ADL                                                            
-% Type of Movement: FALSE                                                          
-% Description of the movement: LyingDown_OnABed                                    
-% Trial: 1                                                                         
-                                                                                    
-% Number of Sensors: 4                                                             
-                                                                                    
-% Used Smartphone: samsung-samsung-SM-G900F-5.0                                    
-% Smartphone's Accelerometer: MPU6500 Acceleration Sensor - Vendor: Invensense     
-% --> Version: 1                                                                   
-% --> Min - Max Delay: 5000us - 200000us                                           
-% --> Maximum Range: 2.0000000329864256 G                                          
-% --> Resolution: 6.103515725666582E-5 G                                           
-                                                                                    
-% SensorTag's Accelerometer: MPU-9250 MEMS MotionTracking Device - Invensense      
-% --> Maximum Range: 16 G                                                          
-% --> Resolution: 0.00024 G                                                        
-                                                                                    
-% MAC Address; Sensor_ID; Position; Device Model                                   
-%F4:09:D8:72:64:3A; 0; RIGHTPOCKET; samsung-SM-G900F-5.0                           
-%C4:BE:84:70:0E:80; 3; WRIST; SensorTag                                            
-%C4:BE:84:70:64:8A; 1; CHEST; SensorTag                                            
-%C4:BE:84:71:A5:02; 2; WAIST; SensorTag                                            
-%B0:B4:48:B8:77:03; 4; ANKLE; SensorTag                                            
-                                                                                    
-% Sensor_Type:                                                                     
-% Accelerometer = 0                                                                
-% Gyroscope = 1                                                                    
-% Magnetometer = 2                                                                 
-                                                                                    
-                                                                                    
-% TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID;            
+TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID
 152;1;0.2475497573614121;0.9657248258590698;0.0546245165169239;0;0
 152;2;0.2524324059486389;0.9681661128997803;0.06146020814776421;0;0
 152;3;0.2504793405532837;0.9627951979637146;0.05999542027711868;0;0

@@ -1,44 +1,4 @@
-% Universidad de Malaga - ETSI de Telecomunicacion (Spain)                         
-% Date: 2017-04-14_23:48:14                                                        
-% ID: Subject_03_ADL_Sitting_GettingUpOnAChair_3                                   
-% Name: Subject_03                                                                 
-% Age: 68                                                                          
-% Height(cm): 168                                                                  
-% Weight(Kg): 97                                                                   
-% Gender: M                                                                        
-                                                                                    
-% Type of Movement: ADL                                                            
-% Type of Movement: FALSE                                                          
-% Description of the movement: Sitting_GettingUpOnAChair                           
-% Trial: 3                                                                         
-                                                                                    
-% Number of Sensors: 5                                                             
-                                                                                    
-% Used Smartphone: LGE-lge-LG-H815-5.1                                             
-% Smartphone's Accelerometer: LGE Accelerometer - Vendor: BOSCH                    
-% --> Version: 1                                                                   
-% --> Min - Max Delay: 5000us - 65535000us                                         
-% --> Maximum Range: 16.000000263891405 G                                          
-% --> Resolution: 1.2136514986004396E-4 G                                          
-                                                                                    
-% SensorTag's Accelerometer: MPU-9250 MEMS MotionTracking Device - Invensense      
-% --> Maximum Range: 16 G                                                          
-% --> Resolution: 0.00024 G                                                        
-                                                                                    
-% MAC Address; Sensor_ID; Position; Device Model                                   
-%f8:95:c7:f3:ba:82; 0; RIGHTPOCKET; lge-LG-H815-5.1                                
-%B0:B4:48:B8:77:03; 4; ANKLE; SensorTag                                            
-%C4:BE:84:70:0E:80; 3; WRIST; SensorTag                                            
-%C4:BE:84:70:64:8A; 1; CHEST; SensorTag                                            
-%C4:BE:84:71:A5:02; 2; WAIST; SensorTag                                            
-                                                                                    
-% Sensor_Type:                                                                     
-% Accelerometer = 0                                                                
-% Gyroscope = 1                                                                    
-% Magnetometer = 2                                                                 
-                                                                                    
-                                                                                    
-% TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID;            
+TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID
 113;1;-0.01045881304889917;-1.040060639381409;-0.06605295836925507;0;0
 113;2;-0.01131300628185272;-1.040793418884277;-0.06190179660916328;0;0
 113;3;-0.008750425651669502;-1.043967485427856;-0.06019340828061104;0;0

@@ -1,44 +1,4 @@
-% Universidad de Malaga - ETSI de Telecomunicacion (Spain)                         
-% Date: 2016-06-01_22:59:07                                                        
-% ID: Subject_18_FALL_backwardFall_13                                              
-% Name: Subject_18                                                                 
-% Age: 24                                                                          
-% Height(cm): 177                                                                  
-% Weight(Kg): 66                                                                   
-% Gender: M                                                                        
-                                                                                    
-% Type of Movement: FALL                                                           
-% Type of Movement: TRUE                                                           
-% Description of the movement: backwardFall                                        
-% Trial: 13                                                                        
-                                                                                    
-% Number of Sensors: 4                                                             
-                                                                                    
-% Used Smartphone: samsung-samsung-SM-G900F-5.0                                    
-% Smartphone's Accelerometer: MPU6500 Acceleration Sensor - Vendor: Invensense     
-% --> Version: 1                                                                   
-% --> Min - Max Delay: 5000us - 200000us                                           
-% --> Maximum Range: 2.0000000329864256 G                                          
-% --> Resolution: 6.103515725666582E-5 G                                           
-                                                                                    
-% SensorTag's Accelerometer: MPU-9250 MEMS MotionTracking Device - Invensense      
-% --> Maximum Range: 16 G                                                          
-% --> Resolution: 0.00024 G                                                        
-                                                                                    
-% MAC Address; Sensor_ID; Position; Device Model                                   
-%F4:09:D8:72:64:3A; 0; RIGHTPOCKET; samsung-SM-G900F-5.0                           
-%C4:BE:84:70:64:8A; 1; CHEST; SensorTag                                            
-%C4:BE:84:71:A5:02; 2; WAIST; SensorTag                                            
-%C4:BE:84:70:0E:80; 3; WRIST; SensorTag                                            
-                                                                                    
-                                                                                    
-% Sensor_Type:                                                                     
-% Accelerometer = 0                                                                
-% Gyroscope = 1                                                                    
-% Magnetometer = 2                                                                 
-                                                                                    
-                                                                                    
-% TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID;            
+TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID
 88;1;0.1675965487957001;0.953213095664978;0.2401647716760635;0;0
 89;2;0.1697937548160553;0.9511379599571228;0.2399816811084747;0;0
 89;3;0.1708313077688217;0.9494290351867676;0.2382727563381195;0;0
