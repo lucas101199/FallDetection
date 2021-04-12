@@ -1,4 +1,4 @@
-TimeStamp; Sample No; X-Axis; Y-Axis; Z-Axis; Sensor Type; Sensor ID
+TimeStamp;Sample No;X-Axis;Y-Axis;Z-Axis;Sensor_Type;Sensor_ID
 484;1;0.125972062;1.009668469;0.226981655;0;0
 484;2;0.059079919;0.965236545;0.219169423;0;0
 484;3;0.012694859;0.86367768;0.119563609;0;0
