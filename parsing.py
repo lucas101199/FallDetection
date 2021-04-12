@@ -20,9 +20,11 @@ for f in allfiles:
     new_file.writelines(output)
     new_file.close()
 """
+
 for f in allfiles[:2]:
     with open(join("UMAFall_Dataset", f)) as csv_file:
         df = pd.read_csv(join("UMAFall_Dataset", f), sep=';', header=0)
         df = df[df.Sensor_ID == 3]
         df = df[df.Sensor_Type != 2]
         print(df)
+
