@@ -2,8 +2,10 @@ import keras as keras
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+
 from tensorflow import keras
 from sklearn.preprocessing import StandardScaler
+
 
 Label = {0 : 'fallen', 1 : 'not_fallen'}
 
