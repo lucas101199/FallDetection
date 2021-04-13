@@ -13,7 +13,7 @@ data_not = pd.read_csv('UMAFall_Dataset/UMAFall_Subject_01_ADL_Aplausing_1_2017-
 # data_fall = pd.read_csv("UMAFall_Dataset/UMAFall_Subject_04_Fall_forwardFall_6_2016-06-13_13-23-05.csv", sep=';', header=0)
 # data_test = pd.read_csv('UMAFall_Subject_01_ADL_Aplausing_2_2017-04-14_23-38-59.csv', sep = ';', header = 0)
 labels = []
-for i in range(3):
+for i in range(6):
     if (i % 2) == 0 :
         labels.append(1)
     else :
@@ -21,7 +21,7 @@ for i in range(3):
 features = data_not.values
 scaler = StandardScaler()
 labels = np.array(labels)
-features3dim = [[[0, 1], [5, 6]], [[10, 11], [15, 16]], [[20, 21], [25, 26]]]
+features3dim = [[0, 1], [5, 6], [10, 11], [15, 16], [20, 21], [25, 26]]
 j = 1
 l = 0
 """
@@ -38,7 +38,9 @@ features3dim = np.array(features3dim)
 print(features3dim.shape)
 
 model = tf.keras.Sequential([
-    keras.layers.LSTM(2, input_shape=(2, 2)),
+    keras.layers.Embedding(input_dim=300, output_dim=64),
+    keras.layers.GRU(256, return_sequences=True),
+    keras.layers.SimpleRNN(128),
     keras.layers.Dense(1)
 ])
 
