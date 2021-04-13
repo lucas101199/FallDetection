@@ -5,46 +5,31 @@ import tensorflow as tf
 
 from tensorflow import keras
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
 
+df = pd.read_csv('AllData.csv', sep=';', header=0)
+df.pop('Sensor_ID')
+train_df, test_df = train_test_split(df, test_size=0.3, random_state=42)
+train_label = np.array(train_df.pop('Action'))
+train_features = np.array(train_df)
 
-Label = {0 : 'fallen', 1 : 'not_fallen'}
+test_label = np.array(test_df.pop('Action'))
+test_features = np.array(test_df)
 
-data_not = pd.read_csv('UMAFall_Dataset/UMAFall_Subject_01_ADL_Aplausing_1_2017-04-14_23-38-23.csv', sep=';', header=0)
-# data_fall = pd.read_csv("UMAFall_Dataset/UMAFall_Subject_04_Fall_forwardFall_6_2016-06-13_13-23-05.csv", sep=';', header=0)
-# data_test = pd.read_csv('UMAFall_Subject_01_ADL_Aplausing_2_2017-04-14_23-38-59.csv', sep = ';', header = 0)
-labels = []
-for i in range(6):
-    if (i % 2) == 0 :
-        labels.append(1)
-    else :
-        labels.append(0)
-features = data_not.values
-scaler = StandardScaler()
-labels = np.array(labels)
-features3dim = [[0, 1], [5, 6], [10, 11], [15, 16], [20, 21], [25, 26]]
-j = 1
-l = 0
-"""
-for i in range(2):
-    if i % 150 == 0:
-        l = l + 1
-    features3dim.append()
-    j = j + 1
-    if j % 150 == 0:
-        j = 1
-"""
-
-features3dim = np.array(features3dim)
-print(features3dim.shape)
+scaler = MinMaxScaler(feature_range=(0, 5))
+scaled = scaler.fit_transform(train_features)
+scaled = pd.DataFrame(scaled)
 
 model = tf.keras.Sequential([
-    keras.layers.Embedding(input_dim=300, output_dim=64),
+    keras.layers.Embedding(input_dim=train_features.shape[-1], output_dim=256),
     keras.layers.GRU(256, return_sequences=True),
     keras.layers.SimpleRNN(128),
-    keras.layers.Dense(1)
+    keras.layers.Dense(12)
 ])
 
 model.compile(loss=tf.losses.MeanSquaredError(), optimizer=tf.optimizers.Adam())
 
-model.fit(features3dim, labels, epochs=2, batch_size=1)
+model.fit(scaled, train_label, epochs=2, batch_size=64)
+
 print(model.output_shape)
