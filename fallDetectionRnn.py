@@ -28,6 +28,7 @@ features = "TimeStamp;Sample No;X-Axis;Y-Axis;Z-Axis;Sensor_Type;Sensor_ID\n"
 # et enregister son contenue dans un new_file, 
 # le but est de concaténer le contenue de tous les fichier qui se trouvent dans "UMAFall_Dataset".
 for f in allfiles:
+    file = open(join("UMAFall_Dataset", f), "r")
     lines = file.readlines()
     file.close()
     if lines[0] != features:
