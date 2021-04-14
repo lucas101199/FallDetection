@@ -100,6 +100,20 @@ features.std(axis = 0)
 
 features3d = features.reshape(features.shape[0] , 1 , 7)
 
+
+'''
+#creer une class de model à utiliser 
+
+class Model(tf.keras.Model):
+    def __init__(self, features3d, labels):
+        super(Model, self).__init__()
+
+       #lesparametres d'entré et de sortie
+        self.features3d = features3d
+        self.labels =labels
+
+     
+'''
 # L'architecture de notre model.
 model = tf.keras.Sequential([
     keras.layers.GRU(256, return_sequences=True , input_dim = 7),
