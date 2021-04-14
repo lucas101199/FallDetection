@@ -10,6 +10,7 @@ import tensorflow as tf
 from tensorflow import keras
 from sklearn.preprocessing import StandardScaler
 
+
 def GetLabelFromFile(f, labels):
     for k, v in labels.items():
         if f.find(v) != -1:
@@ -19,13 +20,11 @@ def GetLabelFromFile(f, labels):
 # Récuperer tous les fichiers qu'il y'a dans le dossier "UMAFall_Dataset".
 allfiles = [f for f in listdir("UMAFall_Dataset") if isfile(join("UMAFall_Dataset", f))]
 
-allfiles
-
 # Préparer les features.
 features = "TimeStamp;Sample No;X-Axis;Y-Axis;Z-Axis;Sensor_Type;Sensor_ID\n"
 
-# pour chaque fichier qu'il y a dans le dossier "UMAFall_Dataset", lire ce fichier, 
-# et enregister son contenue dans un new_file, 
+# pour chaque fichier qu'il y a dans le dossier "UMAFall_Dataset", lire ce fichier,
+# et enregister son contenue dans un new_file,
 # le but est de concaténer le contenue de tous les fichier qui se trouvent dans "UMAFall_Dataset".
 for f in allfiles:
     file = open(join("UMAFall_Dataset", f), "r")
@@ -44,7 +43,7 @@ for f in allfiles:
 
 # Préparation des différents Labels possible allant de 'Aplausing' à 'Fall'
 
-labels = {0: "Aplausing", 1: "HandsUp", 2: "MakingACall", 3: "OpeningDoor", 
+labels = {0: "Aplausing", 1: "HandsUp", 2: "MakingACall", 3: "OpeningDoor",
           4: "Sitting_GettingUpOnAChair", 5: "Walking", 6: "Bending", 7: "Hopping",
           8: "Jogging", 9: "LyingDown", 10: "GoDownstairs", 11: "GoUpstairs", 12: "Fall"}
 
@@ -71,8 +70,7 @@ Label = {0 : 'fallen', 1 : 'not_fallen'}
 
 data_not = pd.read_csv('AllData.csv', sep=';', header=0)
 
-data_not.shape
-
+"""
 # Préparation des targets pour ce dataset.
 
 labels = []
@@ -85,37 +83,33 @@ for i in range(len(data_not)):
 labels = np.array(labels)
 
 labels.shape
+"""
+# create the labels from the column Action
+labels = data_not.pop('Action')
+features = data_not.values # get the features with the remaining columns
 
-features = data_not.values
 
-features.shape
-
-type(features)
 
 # Standarisation des input.
 scaler = StandardScaler()
 features = scaler.fit_transform(features)
 
-features.shape
-
 features.mean(axis = 0)
 
 features.std(axis = 0)
 
-features3d = features.reshape(645261 , 1 , 8)
-
-features3d.shape
+features3d = features.reshape(features.shape[0] , 1 , 7)
 
 # L'architecture de notre model.
 model = tf.keras.Sequential([
-    keras.layers.GRU(256, return_sequences=True , input_dim = 8),
+    keras.layers.GRU(256, return_sequences=True , input_dim = 7),
     keras.layers.SimpleRNN(128),
     keras.layers.Dense(1)
 ])
 
 model.compile(loss=tf.losses.MeanSquaredError(), optimizer=tf.optimizers.Adam())
 
-model.fit(features3d, labels, epochs=2, batch_size=32)
+model.fit(features3d, labels, epochs=10, batch_size=64)
 
 """**Commen on peut le voir, on a un MSE de 0.2503, afin d'augmenter les performances de notre système on peut:**
 
@@ -124,6 +118,5 @@ model.fit(features3d, labels, epochs=2, batch_size=32)
 
 
 
-      
+
 """
- 
