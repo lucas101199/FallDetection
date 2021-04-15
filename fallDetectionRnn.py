@@ -101,16 +101,22 @@ features.std(axis = 0)
 features3d = features.reshape(features.shape[0] , 1 , 7)
 
 
-'''
+
 #creer une class de model à utiliser 
 
 class Model(tf.keras.Model):
-    def __init__(self, features3d, labels):
+    def __init__(self):
         super(Model, self).__init__()
+    
+        keras.layers.GRU(256, return_sequences=True , input_dim = 7),
+        keras.layers.SimpleRNN(128),
+        keras.layers.Dense(1)
 
-       #lesparametres d'entré et de sortie
-        self.features3d = features3d
-        self.labels =labels
+        def call(self, features3d):
+            labels = self.featres3d
+            labels  = sel.labels
+
+model = Model(features3d,labels)
 
      
 '''
@@ -120,10 +126,19 @@ model = tf.keras.Sequential([
     keras.layers.SimpleRNN(128),
     keras.layers.Dense(1)
 ])
-
+'''
 model.compile(loss=tf.losses.MeanSquaredError(), optimizer=tf.optimizers.Adam())
 
-model.fit(features3d, labels, epochs=10, batch_size=64)
+model.fit(features3d, labels, epochs=2, batch_size=64)
+
+#besoin de données de test à la place de features3d et labels pour
+#loss_and_metrics = model.evaluate(features3d, labels, batch_size=128)
+
+#prediction sur de données nouvelles
+#classes = model.predict(x_test, batch_size=128)
+
+print(model.summary())
+print(len(model.layers))
 
 """**Commen on peut le voir, on a un MSE de 0.2503, afin d'augmenter les performances de notre système on peut:**
 
