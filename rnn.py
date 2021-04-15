@@ -1,6 +1,7 @@
 import math
 import numpy as np
 import pandas as pd
+import tensorflow as tf
 from keras import Sequential
 from keras.layers import LSTM, Dropout, Dense, Bidirectional
 from keras.utils.np_utils import to_categorical
@@ -30,7 +31,7 @@ features, label = CreateDataset(60, df)
 label = np.array(label)
 label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (3540,) to [samples, label] (3540,1)
 
-X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.2, random_state=42)
 
 # zero-offset class values
 y_train = y_train - 1
@@ -40,15 +41,18 @@ y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
 model = Sequential()
-model.add(LSTM(100, input_shape=(60, 6), return_sequences=True))
+model.add(LSTM(64, input_shape=(60, 6), return_sequences=True))
 model.add(Bidirectional(LSTM(32)))
 model.add(Dropout(0.5))
-model.add(Dense(100, activation='relu'))
+model.add(Dense(16, activation='relu'))
 model.add(Dense(12, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
-model.fit(X_train, y_train, epochs=20, batch_size=30)
+model.fit(X_train, y_train, epochs=20, batch_size=4)
 
 test_loss, test_acc = model.evaluate(X_test, y_test)
 
 print('Test Loss:', test_loss)
 print('Test Accuracy:', test_acc)
+model.save('saved_model/model.h5')
+
+
