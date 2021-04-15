@@ -2,6 +2,17 @@ from os import listdir
 from os.path import isfile, join
 import pandas as pd
 import numpy as np
+from random import randrange
+
+
+def DeleteRandomTimeSteps():
+    f = open('AllData.csv', 'r+')
+    lines = f.readlines()[1:]
+    f.close()
+    while (len(lines) != 215040):
+        indexToPop = randrange(1, len(lines))
+        lines.pop(indexToPop)
+    return lines
 
 
 def GetLabelFromFile(f, labels):
@@ -9,6 +20,7 @@ def GetLabelFromFile(f, labels):
         if f.find(v) != -1:
             return k
     return -1
+
 
 # Create and return a mean array of the two timeStamps plus an array with the number of samples in the action
 # plus create an array with the label of the action
@@ -22,6 +34,7 @@ def CreateArrayWithoutAxis(df_0, df_1, label):
         meanTimeStamp[i] = round(np.mean([df0[i], df1[i]]))
     return meanTimeStamp, np.arange(min_row), labels
 
+
 # Create and return an array with all the 6 axes inside an array
 def CreateAxis(df_0, df_1):
     df0 = df_0[['X-Axis', 'Y-Axis', 'Z-Axis']].values
@@ -32,6 +45,7 @@ def CreateAxis(df_0, df_1):
         allAxis[i] = np.concatenate((df0[i], df1[i]), axis=None)
     return allAxis
 
+
 # Create and return the complete DataFrame with all arrays pass in parameters
 def CreateDataFrame(timeStamp, samples, axis, label):
     allData = pd.DataFrame({'TimeStamp': timeStamp, 'Sample No': samples,
@@ -40,6 +54,7 @@ def CreateDataFrame(timeStamp, samples, axis, label):
                             'Y-AxisG': [x[4] for x in Axis], 'Z-AxisG': [x[5] for x in Axis],
                             'Action': label})
     return allData
+
 
 allfiles = [f for f in listdir("UMAFall_Dataset") if isfile(join("UMAFall_Dataset", f))]
 
@@ -62,8 +77,8 @@ for f in allfiles:
         new_file.close()
 
 labels = {0: "Aplausing", 1: "HandsUp", 2: "MakingACall", 3: "OpeningDoor",
-        4: "Sitting_GettingUpOnAChair", 5: "Walking", 6: "Bending", 7: "Hopping",
-        8: "Jogging", 9: "LyingDown", 10: "GoDownstairs", 11: "GoUpstairs", 12: "Fall"}
+          4: "Sitting_GettingUpOnAChair", 5: "Walking", 6: "Bending", 7: "Hopping",
+          8: "Jogging", 9: "LyingDown", 10: "GoDownstairs", 11: "GoUpstairs", 12: "Fall"}
 
 AllFeatures = "TimeStamp;Sample No;X-AxisA;Y-AxisA;Z-AxisA;X-AxisG;Y-AxisG;Z-AxisG;Action\n"
 
@@ -90,4 +105,8 @@ for f in allfiles:
 
         df_final.to_csv(r'AllData.csv', mode='a', header=False, index=False, sep=';')
 
-#print(data)
+lines = DeleteRandomTimeSteps()
+file = open('AllData.csv', 'w')
+file.write(AllFeatures)
+file.writelines(lines)
+file.close()
