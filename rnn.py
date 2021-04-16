@@ -27,7 +27,7 @@ def CreateDataset(TimeSteps, df):
 
 df = pd.read_csv('AllData.csv', sep=';', header=0)
 
-features, label = CreateDataset(60, df)
+features, label = CreateDataset(120, df)
 label = np.array(label)
 label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (3540,) to [samples, label] (3540,1)
 
@@ -41,11 +41,11 @@ y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
 model = Sequential()
-model.add(LSTM(64, input_shape=(60, 6), return_sequences=True))
+model.add(LSTM(128, input_shape=(120, 6), return_sequences=True))
 model.add(Bidirectional(LSTM(32)))
-model.add(Dropout(0.5))
 model.add(Dense(16, activation='relu'))
 model.add(Dense(12, activation='softmax'))
+model.summary()
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 model.fit(X_train, y_train, epochs=20, batch_size=4)
 
