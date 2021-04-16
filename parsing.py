@@ -2,17 +2,6 @@ from os import listdir
 from os.path import isfile, join
 import pandas as pd
 import numpy as np
-from random import randrange
-
-
-def DeleteRandomTimeSteps():
-    f = open('AllData.csv', 'r+')
-    lines = f.readlines()[1:]
-    f.close()
-    while len(lines) != 215040:
-        indexToPop = randrange(1, len(lines))
-        lines.pop(indexToPop)
-    return lines
 
 
 def GetLabelFromFile(f, labels):
@@ -22,27 +11,28 @@ def GetLabelFromFile(f, labels):
     return -1
 
 
-# Create and return a mean array of the two timeStamps plus an array with the number of samples in the action
+# Create and return a mean array of the three timeStamps plus an array with the number of samples in the action
 # plus create an array with the label of the action
-def CreateArrayWithoutAxis(df_0, df_1, label):
+def CreateArrayWithoutAxis(df_0, df_1, df_2, label):
     df0 = df_0['TimeStamp'].to_numpy()
     df1 = df_1['TimeStamp'].to_numpy()
-    min_row = min([len(df0), len(df1)])
-    meanTimeStamp = [0] * min_row
-    labels = [label] * min_row
-    for i in range(min_row):
-        meanTimeStamp[i] = round(np.mean([df0[i], df1[i]]))
-    return meanTimeStamp, np.arange(min_row), labels
+    df2 = df_2['TimeStamp'].to_numpy()
+
+    meanTimeStamp = [0] * 100
+    labels = [label] * 100
+    for i in range(100):
+        meanTimeStamp[i] = round(np.mean([df0[i], df1[i], df2[i]]))
+    return meanTimeStamp, np.arange(100), labels
 
 
 # Create and return an array with all the 6 axes inside an array
-def CreateAxis(df_0, df_1):
+def CreateAxis(df_0, df_1, df_2):
     df0 = df_0[['X-Axis', 'Y-Axis', 'Z-Axis']].values
     df1 = df_1[['X-Axis', 'Y-Axis', 'Z-Axis']].values
-    min_row = min([len(df0), len(df1)])
-    allAxis = [0] * min_row
-    for i in range(min_row):
-        allAxis[i] = np.concatenate((df0[i], df1[i]), axis=None)
+    df2 = df_2[['X-Axis', 'Y-Axis', 'Z-Axis']].values
+    allAxis = [0] * 100
+    for i in range(100):
+        allAxis[i] = np.concatenate((df0[i], df1[i], df2[i]), axis=None)
     return allAxis
 
 
@@ -52,6 +42,8 @@ def CreateDataFrame(timeStamp, samples, axis, label):
                             'X-AxisA': [x[0] for x in Axis], 'Y-AxisA': [x[1] for x in Axis],
                             'Z-AxisA': [x[2] for x in Axis], 'X-AxisG': [x[3] for x in Axis],
                             'Y-AxisG': [x[4] for x in Axis], 'Z-AxisG': [x[5] for x in Axis],
+                            'X-AxisM': [x[6] for x in Axis], 'Y-AxisM': [x[7] for x in Axis],
+                            'Z-AxisM': [x[8] for x in Axis],
                             'Action': label})
     return allData
 
@@ -80,7 +72,7 @@ labels = {0: "Aplausing", 1: "HandsUp", 2: "MakingACall", 3: "OpeningDoor",
           4: "Sitting_GettingUpOnAChair", 5: "Walking", 6: "Bending", 7: "Hopping",
           8: "Jogging", 9: "LyingDown", 10: "GoDownstairs", 11: "GoUpstairs", 12: "Fall"}
 
-AllFeatures = "TimeStamp;Sample No;X-AxisA;Y-AxisA;Z-AxisA;X-AxisG;Y-AxisG;Z-AxisG;Action\n"
+AllFeatures = "TimeStamp;Sample No;X-AxisA;Y-AxisA;Z-AxisA;X-AxisG;Y-AxisG;Z-AxisG;X-AxisM;Y-AxisM;Z-AxisM;Action\n"
 
 allData = open('AllData.csv', 'w')
 allData.write(AllFeatures)
@@ -93,15 +85,16 @@ for f in allfiles:
     with open(name_file) as csv_file:
         df = pd.read_csv(name_file, sep=';', header=0)
         df = df[df.Sensor_ID == 3]
-        df = df[df.Sensor_Type != 2]
 
-        df_0 = pd.DataFrame(df[df.Sensor_Type == 0]).drop(['Sensor_Type', 'Sensor_ID'], axis=1)
-        df_1 = pd.DataFrame(df[df.Sensor_Type == 1]).drop(['Sensor_Type', 'Sensor_ID'], axis=1)
+        df_0 = pd.DataFrame(df[df.Sensor_Type == 0]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
+        df_1 = pd.DataFrame(df[df.Sensor_Type == 1]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
+        df_2 = pd.DataFrame(df[df.Sensor_Type == 2]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
+        if not df_2.empty:
+            newTimeStamp, SampleNo, Labels = CreateArrayWithoutAxis(df_0, df_1, df_2, label)
+            Axis = CreateAxis(df_0, df_1, df_2)
 
-        newTimeStamp, SampleNo, Labels = CreateArrayWithoutAxis(df_0, df_1, label)
-        Axis = CreateAxis(df_0, df_1)
+            df_final = CreateDataFrame(newTimeStamp, SampleNo, Axis, Labels)
+            df_final = df_final
 
-        df_final = CreateDataFrame(newTimeStamp, SampleNo, Axis, Labels)
-        df_final = df_final.head(100)
+            df_final.to_csv(r'AllData.csv', mode='a', header=False, index=False, sep=';')
 
-        df_final.to_csv(r'AllData.csv', mode='a', header=False, index=False, sep=';')
