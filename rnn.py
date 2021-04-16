@@ -49,10 +49,8 @@ y_test = to_categorical(y_test)
 
 #le model de la machine ss
 model = Sequential()
-model.add(LSTM(128, input_shape=(100, 6), return_sequences=True))
+model.add(LSTM(100, input_shape=(100, 9), return_sequences=True))
 model.add(Bidirectional(LSTM(32)))
-
-
 model.add(Dense(100, activation='relu'))
 model.add(Dense(12, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
@@ -62,8 +60,3 @@ model.fit(X_train, y_train, epochs=20, batch_size=40)
 
 model.fit(X_train, y_train, epochs=20, batch_size=4)
 model.evaluate(X_test, y_test, batch_size=4)
-
-
-
-
-
