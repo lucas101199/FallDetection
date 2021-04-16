@@ -3,5 +3,5 @@
 frequence sensor : 20 Hz
 60 time steps (split data into windows of 3s)
 
-### Installing python packages
+### Installing python packages (script directory)
 ./packages.sh
