@@ -9,7 +9,7 @@ def DeleteRandomTimeSteps():
     f = open('AllData.csv', 'r+')
     lines = f.readlines()[1:]
     f.close()
-    while (len(lines) != 215040):
+    while len(lines) != 215040:
         indexToPop = randrange(1, len(lines))
         lines.pop(indexToPop)
     return lines
@@ -102,11 +102,6 @@ for f in allfiles:
         Axis = CreateAxis(df_0, df_1)
 
         df_final = CreateDataFrame(newTimeStamp, SampleNo, Axis, Labels)
+        df_final = df_final.head(100)
 
         df_final.to_csv(r'AllData.csv', mode='a', header=False, index=False, sep=';')
-
-lines = DeleteRandomTimeSteps()
-file = open('AllData.csv', 'w')
-file.write(AllFeatures)
-file.writelines(lines)
-file.close()
