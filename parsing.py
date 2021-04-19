@@ -70,7 +70,7 @@ for f in allfiles:
 
 labels = {0: "Sitting_GettingUpOnAChair", 1: "Walking", 2: "Bending", 3: "backwardFall", 4: "forwardFall", 5: "lateralFall"}
 
-AllFeatures = "TimeStamp,Sample No,X-AxisA,Y-AxisA,Z-AxisA,X-AxisG,Y-AxisG,Z-AxisG,X-AxisM,Y-AxisM,Z-AxisM,Action\n"
+AllFeatures = "TimeStamp,Sample No,X-AxisA,Y-AxisA,Z-AxisA,X-AxisG,Y-AxisG,Z-AxisG,X-AxisM,Y-AxisM,Z-AxisM,class\n"
 
 allData = open('AllData.csv', 'w')
 allData.write(AllFeatures)
@@ -94,6 +94,7 @@ for f in allfiles:
                 Axis = CreateAxis(df_0, df_1, df_2)
 
                 df_final = CreateDataFrame(newTimeStamp, SampleNo, Axis, Labels)
-                df_final['Action'] = np.where(df_final['Action'] > 3, 3, df_final['Action'])
+                df_final['Action'] = np.where(df_final['Action'] >= 3, 'Fall', df_final['Action'])
+                df_final['Action'] = np.where(df_final['Action'] != 'Fall', 'NotFall', df_final['Action'])
 
                 df_final.to_csv(r'AllData.csv', mode='a', header=False, index=False, sep=',')
