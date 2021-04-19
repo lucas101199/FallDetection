@@ -68,11 +68,9 @@ for f in allfiles:
         new_file.writelines(output)
         new_file.close()
 
-labels = {0: "Aplausing", 1: "HandsUp", 2: "MakingACall", 3: "OpeningDoor",
-          4: "Sitting_GettingUpOnAChair", 5: "Walking", 6: "Bending", 7: "Hopping",
-          8: "Jogging", 9: "LyingDown", 10: "GoDownstairs", 11: "GoUpstairs", 12: "Fall"}
+labels = {0: "Sitting_GettingUpOnAChair", 1: "Walking", 2: "Bending", 3: "backwardFall", 4: "forwardFall", 5: "lateralFall"}
 
-AllFeatures = "TimeStamp;Sample No;X-AxisA;Y-AxisA;Z-AxisA;X-AxisG;Y-AxisG;Z-AxisG;X-AxisM;Y-AxisM;Z-AxisM;Action\n"
+AllFeatures = "TimeStamp,Sample No,X-AxisA,Y-AxisA,Z-AxisA,X-AxisG,Y-AxisG,Z-AxisG,X-AxisM,Y-AxisM,Z-AxisM,Action\n"
 
 allData = open('AllData.csv', 'w')
 allData.write(AllFeatures)
@@ -82,19 +80,20 @@ allData.close()
 for f in allfiles:
     name_file = join("UMAFall_Dataset", f)
     label = GetLabelFromFile(name_file, labels)
-    with open(name_file) as csv_file:
-        df = pd.read_csv(name_file, sep=';', header=0)
-        df = df[df.Sensor_ID == 3]
+    if label != -1:
+        with open(name_file) as csv_file:
+            df = pd.read_csv(name_file, sep=';', header=0)
+            df = df[df.Sensor_ID == 3]
 
-        df_0 = pd.DataFrame(df[df.Sensor_Type == 0]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
-        df_1 = pd.DataFrame(df[df.Sensor_Type == 1]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
-        df_2 = pd.DataFrame(df[df.Sensor_Type == 2]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
-        if not df_2.empty:
-            newTimeStamp, SampleNo, Labels = CreateArrayWithoutAxis(df_0, df_1, df_2, label)
-            Axis = CreateAxis(df_0, df_1, df_2)
+            df_0 = pd.DataFrame(df[df.Sensor_Type == 0]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
+            df_1 = pd.DataFrame(df[df.Sensor_Type == 1]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
+            df_2 = pd.DataFrame(df[df.Sensor_Type == 2]).drop(['Sensor_Type', 'Sensor_ID'], axis=1).head(100)
 
-            df_final = CreateDataFrame(newTimeStamp, SampleNo, Axis, Labels)
-            df_final = df_final
+            if not df_2.empty:
+                newTimeStamp, SampleNo, Labels = CreateArrayWithoutAxis(df_0, df_1, df_2, label)
+                Axis = CreateAxis(df_0, df_1, df_2)
 
-            df_final.to_csv(r'AllData.csv', mode='a', header=False, index=False, sep=';')
+                df_final = CreateDataFrame(newTimeStamp, SampleNo, Axis, Labels)
+                df_final['Action'] = np.where(df_final['Action'] > 3, 3, df_final['Action'])
 
+                df_final.to_csv(r'AllData.csv', mode='a', header=False, index=False, sep=',')
