@@ -52,7 +52,7 @@ allData = open('AllData.csv', 'w')
 allData.write(features_action)
 allData.close()
 
-# Enregistrer le contenu de tous les fichier qui se troyvent dans "UMAFall_Dataset" dans un seul dataset très grand nomé 'AllData.csv'
+# Enregistrer le contenu de tous les fichier qui se trouvent dans "UMAFall_Dataset" dans un seul dataset très grand nomé 'AllData.csv'
 
 for f in allfiles:
     name_file = join("UMAFall_Dataset", f)
