@@ -1,7 +1,6 @@
 import math
 import numpy as np
 import pandas as pd
-import preprocessing as preprocessing
 import tensorflow as tf
 from keras import Sequential
 from keras.layers import LSTM, Dropout, Dense, Bidirectional
@@ -11,9 +10,9 @@ from keras.layers.convolutional import Conv1D
 from keras.layers.convolutional import MaxPooling1D
 from sklearn.model_selection import train_test_split
 from keras.layers import Flatten
-from sklearn.svm import SVC
 from tensorflow.keras.layers.experimental import preprocessing
 from sklearn.metrics import confusion_matrix
+from sklearn import preprocessing
 
 
 # Create a dataset from a DataFrame of size [samples, timesteps, features] and size [samples, action] for the label
@@ -25,9 +24,8 @@ def CreateDataset(TimeSteps, df):
     for i in range(0, len(df), TimeSteps):
         features[j] = df.loc[i:i + TimeSteps - 1,
                       ['X-AxisA', 'Y-AxisA', 'Z-AxisA', 'X-AxisG', 'Y-AxisG', 'Z-AxisG', 'X-AxisM', 'Y-AxisM', 'Z-AxisM']].values
-        action = df.loc[i:i + TimeSteps - 1, ['Action']].values
-        action = action.flatten()
-        label.append(np.bincount(action).argmax())
+        action = df.loc[i, ['class']].values
+        label.append(action)
         j += 1
     return features, label
 
@@ -38,20 +36,20 @@ features, label = CreateDataset(100, df)
 label = np.array(label)
 label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (3540,) to [samples, label] (3540,1)
 
-X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.2, random_state=42)
+# Encode the label
+le = preprocessing.LabelEncoder()
+label = le.fit_transform(label)
 
-# zero-offset class values
+# Split the dataset between train and test
+X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.3, random_state=42)
 
-# one hot encode y
-y_train = to_categorical(y_train)
-y_test = to_categorical(y_test)
-
+# Create and fit the model
 model = Sequential()
-model.add(LSTM(100, input_shape=(100, 9), return_sequences=True))
-model.add(Bidirectional(LSTM(32)))
-model.add(Dense(100, activation='relu'))
-model.add(Dense(4, activation='softmax'))
-model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.add(LSTM(200, input_shape=(100, 9), return_sequences=True))
+model.add(Bidirectional(LSTM(64, return_sequences=True)))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 model.fit(X_train, y_train, epochs=20, batch_size=4)
 model.evaluate(X_test, y_test, batch_size=4)
@@ -72,4 +70,13 @@ c.fit(X_train, y_train)
 score = c.score(X_test, y_test)
 y_pred = c.predict(X_test)
 print(confusion_matrix(y_test, y_pred))
+
+
+best model :
+model = Sequential()
+model.add(LSTM(200, input_shape=(100, 9), return_sequences=True))
+model.add(Bidirectional(LSTM(64)))
+model.add(Dropout(0.5))
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 """
