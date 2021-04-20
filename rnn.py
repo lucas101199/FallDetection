@@ -13,6 +13,8 @@ from keras.layers import Flatten
 from tensorflow.keras.layers.experimental import preprocessing
 from sklearn.metrics import confusion_matrix
 from sklearn import preprocessing
+import matplotlib.pyplot as plt
+
 
 
 # Create a dataset from a DataFrame of size [samples, timesteps, features] and size [samples, action] for the label
@@ -44,40 +46,54 @@ label = le.fit_transform(label)
 # Split the dataset between train and test
 X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.3, random_state=42)
 
-# Create and fit the model
-model = Sequential()
-model.add(LSTM(200, input_shape=(100, 9), return_sequences=True))
-model.add(Bidirectional(LSTM(64)))
-model.add(Dropout(0.5))
-model.add(Dense(1, activation='sigmoid'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+#show the size of each cut
+print(X_train.shape , X_test.shape , y_train.shape , y_test.shape)
 
-model.fit(X_train, y_train, epochs=20, batch_size=4)
+# zero-offset class values
+y_train = y_train - 1
+y_test = y_test - 1
+# one hot encode y
+y_train = to_categorical(y_train)
+y_test = to_categorical(y_test)
+
+#le model de la machine ss
+model = Sequential()
+model.add(LSTM(100, input_shape=(100, 9), return_sequences=True,
+               kernel_regularizer=tf.keras.regularizers.L2(l2=0.01), 
+               recurrent_regularizer=tf.keras.regularizers.L2(l2=0.01),
+               bias_regularizer=tf.keras.regularizers.L2(l2=0.01),
+               activity_regularizer=tf.keras.regularizers.L2(l2=0.01)))
+model.add(Bidirectional(LSTM(32)))
+model.add(Dense(100, activation='relu'))
+model.add(Dense(12, activation='softmax'))
+model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+#model.fit(X_train, y_train, epochs=20, batch_size=40)
+#modification of fit model
+history = model.fit(X_train, y_train, epochs=20, batch_size=16, validation_data=(X_test , y_test))
+
+#model.fit(X_train, y_train, epochs=20, batch_size=4)
+
 model.evaluate(X_test, y_test, batch_size=4)
 
-"""
-df = pd.read_csv('AllData.csv', sep=';')
-label = df.pop('Action').replace([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], 0)
-label = label.replace(12, 1)
-features = np.array(df)
+# list all data in history
+print(history.history.keys())
 
-normalize = preprocessing.Normalization()
-normalize.adapt(features)
-
-X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.2, random_state=42)
-
-c = SVC(gamma=2, C=1)
-c.fit(X_train, y_train)
-score = c.score(X_test, y_test)
-y_pred = c.predict(X_test)
-print(confusion_matrix(y_test, y_pred))
+#plot the training and validation accuracy and loss at each epoch
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
 
 
-best model :
-model = Sequential()
-model.add(LSTM(200, input_shape=(100, 9), return_sequences=True))
-model.add(Bidirectional(LSTM(64)))
-model.add(Dropout(0.5))
-model.add(Dense(1, activation='sigmoid'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-"""
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
