@@ -40,6 +40,9 @@ label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (35
 
 X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.2, random_state=42)
 
+#show the size of each cut
+X_train.shape , X_test.shape , y_train.shape , y_test.shape
+
 # zero-offset class values
 y_train = y_train - 1
 y_test = y_test - 1
