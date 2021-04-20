@@ -23,8 +23,9 @@ def CreateDataset(TimeSteps, df):
     label = []
     for i in range(0, len(df), TimeSteps):
         features[j] = df.loc[i:i + TimeSteps - 1,
-                      ['X-AxisA', 'Y-AxisA', 'Z-AxisA', 'X-AxisG', 'Y-AxisG', 'Z-AxisG', 'X-AxisM', 'Y-AxisM', 'Z-AxisM']].values
-        action = df.loc[i, ['class']].values
+                      ['X-AxisA', 'Y-AxisA', 'Z-AxisA', 'X-AxisG', 'Y-AxisG', 'Z-AxisG',
+                       'X-AxisM', 'Y-AxisM', 'Z-AxisM']].values
+        action = df.loc[i, ['Class']].values
         label.append(action)
         j += 1
     return features, label
@@ -46,7 +47,7 @@ X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0
 # Create and fit the model
 model = Sequential()
 model.add(LSTM(200, input_shape=(100, 9), return_sequences=True))
-model.add(Bidirectional(LSTM(64, return_sequences=True)))
+model.add(Bidirectional(LSTM(64)))
 model.add(Dropout(0.5))
 model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
