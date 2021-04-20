@@ -41,7 +41,7 @@ label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (35
 X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.2, random_state=42)
 
 #show the size of each cut
-X_train.shape , X_test.shape , y_train.shape , y_test.shape
+print(X_train.shape , X_test.shape , y_train.shape , y_test.shape)
 
 # zero-offset class values
 y_train = y_train - 1
@@ -62,8 +62,13 @@ model.add(Dense(100, activation='relu'))
 model.add(Dense(12, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-model.fit(X_train, y_train, epochs=20, batch_size=40)
+#model.fit(X_train, y_train, epochs=20, batch_size=40)
+#modification of fit model
+history = model.fit(X_train, y_train, epochs=20, batch_size=16, validation_data=(X_test , y_test))
 
+#model.fit(X_train, y_train, epochs=20, batch_size=4)
 
-model.fit(X_train, y_train, epochs=20, batch_size=4)
 model.evaluate(X_test, y_test, batch_size=4)
+
+# list all data in history
+print(history.history.keys())
