@@ -14,6 +14,7 @@ from keras.layers import Flatten
 from sklearn.svm import SVC
 from tensorflow.keras.layers.experimental import preprocessing
 from sklearn.metrics import confusion_matrix
+import matplotlib.pyplot as plt
 
 
 # Create a dataset from a DataFrame of size [samples, timesteps, features] and size [samples, action] for the label
@@ -72,3 +73,12 @@ model.evaluate(X_test, y_test, batch_size=4)
 
 # list all data in history
 print(history.history.keys())
+
+#plot the training and validation accuracy and loss at each epoch
+plt.plot(history.history['accuracy'])
+plt.plot(history.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
