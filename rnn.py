@@ -63,9 +63,9 @@ model.add(LSTM(100, input_shape=(100, 9), return_sequences=True,
                recurrent_regularizer=tf.keras.regularizers.L2(l2=0.01),
                bias_regularizer=tf.keras.regularizers.L2(l2=0.01),
                activity_regularizer=tf.keras.regularizers.L2(l2=0.01)))
-model.add(Bidirectional(LSTM(32)))
-model.add(Dense(100, activation='relu'))
-model.add(Dense(12, activation='softmax'))
+#model.add(Bidirectional(LSTM(32)))
+#model.add(Dense(100, activation='relu'))
+#model.add(Dense(12, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 #model.fit(X_train, y_train, epochs=20, batch_size=40)
