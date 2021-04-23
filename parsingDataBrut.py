@@ -1,5 +1,11 @@
-file = open("data_brut.txt", 'r')
-fileToWrite = open("dataBrut.csv", 'w')
+import sys
+
+
+file_name = sys.argv[1]
+file_write = sys.argv[2]
+
+file = open(file_name, 'r')
+fileToWrite = open(file_write, 'w')
 lines = file.readlines()
 features = 'TimeStamp,X-Axis,Y-Axis,Z-Axis,Velocity\n'
 fileToWrite.write(features)

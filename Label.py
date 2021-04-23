@@ -8,7 +8,7 @@ def ParseAnnotationsFile(file):
     # dict annotations  with format {1: [start, end, label]}
     annotations = {}
     df = pd.read_csv(file)['label']
-    line = re.sub('[{}"[]', '', df.values[0]) # delete {}]" characters
+    line = re.sub('[{}"[]', '', df.values[0])  # delete {}]" characters
     line = line.split(']')
 
     for i in range(len(line)):
@@ -17,11 +17,13 @@ def ParseAnnotationsFile(file):
             for j in value:
                 if j == '':
                     value.remove(j)
-            val_dict = [value[0].lstrip().split(' ')[1], value[1].lstrip().split(' ')[1], value[3].lstrip().split(' ')[1]]
+            val_dict = [value[0].lstrip().split(' ')[1], value[1].lstrip().split(' ')[1],
+                        value[3].lstrip().split(' ')[1]]
             annotations[i] = val_dict
     return annotations
 
 
+# write the new column with the label in the csv file and delete the data with no label
 def WriteLabelInFile(dict, file):
     df = pd.read_csv(file)
     df['Class'] = np.nan
@@ -35,7 +37,7 @@ def WriteLabelInFile(dict, file):
 
     df = df[df.Class.notnull()]
     df = df.round(decimals=3)
-    df.to_csv(file)
+    df.to_csv(file, index=False)
 
 
 file_name = sys.argv[1]
