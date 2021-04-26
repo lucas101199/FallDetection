@@ -87,6 +87,7 @@ plt.ylabel('accuracy')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
+plt.savefig("accuracy.png")
 
 
 # summarize history for loss
@@ -97,3 +98,6 @@ plt.ylabel('loss')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
+plot.savefig("loss.png")
+
+
