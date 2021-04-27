@@ -1,5 +1,5 @@
 def getSensors():
-    sensorList = [ 'Accelerometer: x-axis',
+    sensorList = ['Accelerometer: x-axis',
            'Accelerometer: y-axis',
            'Accelerometer: z-axis',
            'Velocity: value'
