@@ -37,7 +37,7 @@ def plot3D(data, title):
 
 # change the original data with the new filtered data
 # return a dataframe with the filtered values instead of the original
-def ChangeTheData(file, kernel_size):
+def ChangeData(file, kernel_size):
     df = pd.read_csv(file)
     x = df.drop(['TimeStamp', 'Class'], axis=1).values
     timestamp = df.loc[:, 'TimeStamp'].values
