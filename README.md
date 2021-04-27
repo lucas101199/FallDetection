@@ -1,7 +1,7 @@
 # FallDetection
 
-frequence sensor : 20 Hz
-60 time steps (split data into windows of 3s)
+frequence sensor : 100 Hz
+600 time steps (split data into windows of 2s)
 
 ### Installing python packages (script directory)
 ./packages.sh

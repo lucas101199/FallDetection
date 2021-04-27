@@ -12,10 +12,11 @@ def sliding_window(file, time):
     end_time = timestamp[-1]
     while start_time + pd.offsets.Second(time) <= end_time + pd.offsets.Second(1):
         data = df.loc[(df['TimeStamp'] >= start_time) & (df['TimeStamp'] <= start_time + pd.offsets.Second(time))]
-        start_time += pd.offsets.Second(time/2)
-        print(data)
+        start_time += pd.offsets.Second(time / 2)
+        set_windows.append(data)
+    if len(set_windows) == 0:
+        set_windows = df
+    return set_windows
 
 
-sliding_window('test.csv', 1)
-
-#192.168.0.41
+# 192.168.0.41
