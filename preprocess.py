@@ -39,10 +39,9 @@ def plot3D(data, title):
 # return a dataframe with the filtered values instead of the original
 def ChangeData(file, kernel_size):
     df = pd.read_csv(file)
-    x = df.drop(['TimeStamp', 'Class'], axis=1).values
+    x = df.drop(['TimeStamp'], axis=1).values
     timestamp = df.loc[:, 'TimeStamp'].values
-    class_ = df.loc[:, 'Class'].values
     median_data = median_filter(x, kernel_size)
     new_df_dict = {'TimeStamp': timestamp, 'X-Axis': median_data[:, 0], 'Y-Axis': median_data[:, 1],
-                   'Z-Axis': median_data[:, 2], 'Velocity': median_data[:, 3], 'Class': class_}
+                   'Z-Axis': median_data[:, 2]}
     return pd.DataFrame(new_df_dict)
