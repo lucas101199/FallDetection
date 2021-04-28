@@ -1,6 +1,6 @@
 import numpy as np
 import statistics as st
-from scipy.stats import kurtosis, skew, entropy, iqr, median_abs_deviation
+from scipy.stats import entropy, iqr, median_abs_deviation
 
 
 # Sum of the squares divided by the number of values
