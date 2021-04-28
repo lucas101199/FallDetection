@@ -1,3 +1,4 @@
+"""
 import math
 import numpy as np
 import pandas as pd
@@ -14,7 +15,6 @@ from tensorflow.keras.layers.experimental import preprocessing
 from sklearn.metrics import confusion_matrix
 from sklearn import preprocessing
 import matplotlib.pyplot as plt
-
 
 
 # Create a dataset from a DataFrame of size [samples, timesteps, features] and size [samples, action] for the label
@@ -46,8 +46,8 @@ label = le.fit_transform(label)
 # Split the dataset between train and test
 X_train, X_test, y_train, y_test = train_test_split(features, label, test_size=0.3, random_state=42)
 
-#show the size of each cut
-print(X_train.shape , X_test.shape , y_train.shape , y_test.shape)
+# show the size of each cut
+print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
 
 # zero-offset class values
 y_train = y_train - 1
@@ -56,10 +56,10 @@ y_test = y_test - 1
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 
-#le model de la machine ss
+# le model de la machine ss
 model = Sequential()
 model.add(LSTM(100, input_shape=(100, 9), return_sequences=True,
-               kernel_regularizer=tf.keras.regularizers.L2(l2=0.01), 
+               kernel_regularizer=tf.keras.regularizers.L2(l2=0.01),
                recurrent_regularizer=tf.keras.regularizers.L2(l2=0.01),
                bias_regularizer=tf.keras.regularizers.L2(l2=0.01),
                activity_regularizer=tf.keras.regularizers.L2(l2=0.01)))
@@ -68,18 +68,18 @@ model.add(LSTM(100, input_shape=(100, 9), return_sequences=True,
 #model.add(Dense(12, activation='softmax'))
 model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-#model.fit(X_train, y_train, epochs=20, batch_size=40)
-#modification of fit model
-history = model.fit(X_train, y_train, epochs=20, batch_size=16, validation_data=(X_test , y_test))
+# model.fit(X_train, y_train, epochs=20, batch_size=40)
+# modification of fit model
+history = model.fit(X_train, y_train, epochs=20, batch_size=16, validation_data=(X_test, y_test))
 
-#model.fit(X_train, y_train, epochs=20, batch_size=4)
+# model.fit(X_train, y_train, epochs=20, batch_size=4)
 
 model.evaluate(X_test, y_test, batch_size=4)
 
 # list all data in history
 print(history.history.keys())
 
-#plot the training and validation accuracy and loss at each epoch
+# plot the training and validation accuracy and loss at each epoch
 plt.plot(history.history['accuracy'])
 plt.plot(history.history['val_accuracy'])
 plt.title('model accuracy')
@@ -88,7 +88,6 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 plt.savefig("accuracy.png")
-
 
 # summarize history for loss
 plt.plot(history.history['loss'])
@@ -99,5 +98,4 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 plot.savefig("loss.png")
-
-
+"""

@@ -1,3 +1,4 @@
+"""
 from os import listdir
 from os.path import isfile, join
 import pandas as pd
@@ -173,3 +174,4 @@ while fallData >= notFallData:
     WriteInFileNotFall(file, 'AllData.csv', folder)
     notFallData = pd.DataFrame(df[df.Class == 'NotFall']).shape[0]
     i += 1
+"""
