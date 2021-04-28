@@ -1,3 +1,4 @@
+"""
 # Les import necessaires.
 from os import listdir
 from os.path import isfile, join
@@ -70,7 +71,7 @@ Label = {0 : 'fallen', 1 : 'not_fallen'}
 
 data_not = pd.read_csv('AllData.csv', sep=';', header=0)
 
-"""
+
 # Préparation des targets pour ce dataset.
 
 labels = []
@@ -83,7 +84,7 @@ for i in range(len(data_not)):
 labels = np.array(labels)
 
 labels.shape
-"""
+
 # create the labels from the column Action
 labels = data_not.pop('Action')
 features = data_not.values # get the features with the remaining columns
@@ -140,9 +141,9 @@ model.fit(features3d, labels, epochs=2, batch_size=64)
 print(model.summary())
 print(len(model.layers))
 
-"""**Commen on peut le voir, on a un MSE de 0.2503, afin d'augmenter les performances de notre système on peut:**
+**Commen on peut le voir, on a un MSE de 0.2503, afin d'augmenter les performances de notre système on peut:**
 
-*   Complixifier l'architecture de notre réseau de neuronnes.
+*   Complexifier l'architecture de notre réseau de neuronnes.
 *   Augmenter le nombre d'épochs.
 
 
