@@ -20,6 +20,6 @@ def normalizeData(file):
 # for 1 file
 file = 'test.csv'
 filetxt = 'raw_data.txt'
-df = ChangeData(file, 3)  # preprocess
-sliding_window(df, 2)  # segmentation
+#df = ChangeData(file, 3)  # preprocess
+#sliding_window(df, 2)  # segmentation
 WriteFeatures(filetxt)  # features extraction

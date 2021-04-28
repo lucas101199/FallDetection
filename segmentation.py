@@ -1,6 +1,9 @@
 # sliding windows of 2 sec and 50% overlap
 # time pass in argument is in second and return a set of windows
+# frequence 100Hz
 import pandas as pd
+
+FREQUENCY = 100
 
 
 def WriteData(data, label):
@@ -9,21 +12,18 @@ def WriteData(data, label):
     for i in range(len(data)):
         for j in range(3):
             line += str(data[i][j]) + ' '
-    line += label[0] + '\n'
+    line += str(label[0]) + '\n'
     file.write(line)
 
 
 def sliding_window(df, time):
-    df['TimeStamp'] = pd.to_datetime(df['TimeStamp'], infer_datetime_format=True)
-    timestamp = df['TimeStamp'].values
-    start_time = timestamp[0]
-    end_time = timestamp[-1]
-    while start_time + pd.offsets.Second(time) <= end_time + pd.offsets.Second(1):
-        data = df.loc[
-            (df['TimeStamp'] >= start_time) & (df['TimeStamp'] <= start_time + pd.offsets.Second(time))].values
-        label = data[:, 4]
-        data = data[:, 1:4]
-        WriteData(data, label)
-        start_time += pd.offsets.Second(time / 2)
+    size_window = time * FREQUENCY
+    for i in range(0, len(df), int(size_window/2)):
+        data = df[i:(i+size_window)].values
+        if len(data) == size_window:
+            label = data[:, 4]
+            data = data[:, 1:4]
+            WriteData(data, label)
+
 
 # 192.168.0.41
