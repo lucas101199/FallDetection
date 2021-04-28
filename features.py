@@ -48,9 +48,9 @@ def GetFeatures(x, y, z):
     features += str((np.sqrt(xrms) / np.sqrt(len(x)))) + ' '
     features += str((np.sqrt(yrms) / np.sqrt(len(y)))) + ' '
     features += str((np.sqrt(zrms) / np.sqrt(len(z)))) + ' '
-    features += str(np.median(xcor))
-    features += str(np.median(ycor))
-    features += str(np.median(zcor))
+    features += str(np.median(xcor)) + ' '
+    features += str(np.median(ycor)) + ' '
+    features += str(np.median(zcor)) + ' '
     features += str(entropy(x)) + ' '
     features += str(entropy(y)) + ' '
     features += str(entropy(z)) + ' '
@@ -76,11 +76,11 @@ def WriteFeatures(filename):
         line_split = line.split(' ')
         label = line_split[-1]
         line_split = line_split[:-1]
-        x = list(map(int, line_split[::3]))
-        y = list(map(int, line_split[1::3]))
-        z = list(map(int, line_split[2::3]))
+        x = list(map(float, line_split[::3]))
+        y = list(map(float, line_split[1::3]))
+        z = list(map(float, line_split[2::3]))
         feature_file.write(GetFeatures(x, y, z))
-        label_file.write(label + '\n')
+        label_file.write(label)
     feature_file.close()
     label_file.close()
     file.close()
