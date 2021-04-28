@@ -13,11 +13,9 @@ def WriteData(data, label):
     file.write(line)
 
 
-def sliding_window(file, time):
-    df = pd.read_csv(file)
+def sliding_window(df, time):
     df['TimeStamp'] = pd.to_datetime(df['TimeStamp'], infer_datetime_format=True)
     timestamp = df['TimeStamp'].values
-    set_windows = []
     start_time = timestamp[0]
     end_time = timestamp[-1]
     while start_time + pd.offsets.Second(time) <= end_time + pd.offsets.Second(1):
@@ -27,8 +25,5 @@ def sliding_window(file, time):
         data = data[:, 1:4]
         WriteData(data, label)
         start_time += pd.offsets.Second(time / 2)
-        set_windows.append(data)
-    return set_windows
-
 
 # 192.168.0.41

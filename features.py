@@ -1,5 +1,4 @@
 import numpy as np
-import pandas as pd
 import statistics as st
 from scipy.stats import kurtosis, skew, entropy, iqr, median_abs_deviation
 
@@ -68,22 +67,20 @@ def GetFeatures(x, y, z):
     return features
 
 
-file = open('raw_data.txt', 'r')
-feature_file = open('features.txt', 'a+')
-label_file = open('label.txt', 'a+')
-lines = file.readlines()
-for line in lines:
-    line_split = line.split(' ')
-    label = line_split[-1]
-    line_split = line_split[:-1]
-    x = list(map(int, line_split[::3]))
-    y = list(map(int, line_split[1::3]))
-    z = list(map(int, line_split[2::3]))
-    feature_file.write(GetFeatures(x, y, z))
-    label_file.write(label + ' ')
-
-feature_file.close()
-label_file.close()
-file.close()
-
-
+def WriteFeatures(filename):
+    file = open(filename, 'r')
+    feature_file = open('features.txt', 'a+')
+    label_file = open('label.txt', 'a+')
+    lines = file.readlines()
+    for line in lines:
+        line_split = line.split(' ')
+        label = line_split[-1]
+        line_split = line_split[:-1]
+        x = list(map(int, line_split[::3]))
+        y = list(map(int, line_split[1::3]))
+        z = list(map(int, line_split[2::3]))
+        feature_file.write(GetFeatures(x, y, z))
+        label_file.write(label + '\n')
+    feature_file.close()
+    label_file.close()
+    file.close()
