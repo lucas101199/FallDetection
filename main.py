@@ -1,8 +1,6 @@
+import numpy as np
 from os import listdir
 from os.path import isfile, join
-
-import numpy as np
-
 from segmentation import sliding_window
 from preprocess import ChangeData
 from features import WriteFeatures
