@@ -16,7 +16,7 @@ def normalizeData(file):
     for line in lines:
         features = []
         for l in line.split(' '):
-            features.append(int(l))
+            features.append(float(l))
         data_normalize.append(features)
     scaler = MinMaxScaler(feature_range=(-1, 1))
     return scaler.fit_transform(data_normalize)
@@ -25,8 +25,9 @@ def normalizeData(file):
 folder = 'NotFall'
 allfiles = [f for f in listdir(folder) if isfile(join(folder, f))]
 filetxt = 'raw_data.txt'
+print(allfiles)
 for file in allfiles:
-    df = ChangeData(file, 3)  # preprocess
+    df = ChangeData(join(folder, file), 3)  # preprocess
     sliding_window(df, 2)  # segmentation
 
 WriteFeatures(filetxt)  # features extraction
