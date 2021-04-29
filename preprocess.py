@@ -46,3 +46,9 @@ def ChangeData(file, kernel_size):
     new_df_dict = {'TimeStamp': timestamp, 'X-Axis': median_data[:, 0], 'Y-Axis': median_data[:, 1],
                    'Z-Axis': median_data[:, 2], 'Class': label}
     return pd.DataFrame(new_df_dict)
+
+
+df = pd.read_csv('balais_4_L.csv')
+data = df.drop(['TimeStamp'], axis=1).values
+plot_lines(data, 50, 'balais')
+plt.show()
