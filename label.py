@@ -21,7 +21,6 @@ def ParseAnnotationsFile(file):
             val_dict = [value[0].lstrip().split(' ')[1] + ' ' + value[0].lstrip().split(' ')[2],
                         value[1].lstrip().split(' ')[1] + ' ' + value[1].lstrip().split(' ')[2],
                         value[3].lstrip().split(' ')[1]]
-            print(val_dict)
             annotations[i] = val_dict
     return annotations
 
@@ -35,7 +34,6 @@ def WriteLabelInFile(dict, file):
         end = datetime.strptime(v[1], '%Y-%m-%d %H:%M:%S.%f')
         label = v[2]
         df['TimeStamp'] = pd.to_datetime(df['TimeStamp'], infer_datetime_format=True)
-        print(df)
         index_time_start = df.loc[df['TimeStamp'] >= start].head(1).index.values.astype(int)[0]
         index_time_end = df.loc[df['TimeStamp'] >= end].head(1).index.values.astype(int)[0]
         df.at[index_time_start:index_time_end, 'Class'] = label

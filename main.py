@@ -1,3 +1,8 @@
+from os import listdir
+from os.path import isfile, join
+
+import numpy as np
+
 from segmentation import sliding_window
 from preprocess import ChangeData
 from features import WriteFeatures
@@ -11,15 +16,20 @@ def normalizeData(file):
     for line in lines:
         features = []
         for l in line.split(' '):
-            features.append(int(l))
+            features.append(float(l))
         data_normalize.append(features)
-    scaler = MinMaxScaler()
+    scaler = MinMaxScaler(feature_range=(-1, 1))
     return scaler.fit_transform(data_normalize)
 
 
-# for 1 file
-file = 'test.csv'
+folder = 'NotFall'
+allfiles = [f for f in listdir(folder) if isfile(join(folder, f))]
 filetxt = 'raw_data.txt'
-#df = ChangeData(file, 3)  # preprocess
-#sliding_window(df, 2)  # segmentation
+print(allfiles)
+for file in allfiles:
+    df = ChangeData(join(folder, file), 3)  # preprocess
+    sliding_window(df, 2)  # segmentation
+
 WriteFeatures(filetxt)  # features extraction
+norm_Data = normalizeData('features.txt')
+np.savetxt('features_norm.txt', norm_Data, fmt='%1.4e')

@@ -1,0 +1,13 @@
+- recuperer les données sur internet
+- les mettre dans un fichier txt
+- appeler le fichier parsingDataBrut.py argv1 argv2 (argv1 = le fichier txt avec les données brut, argv2 = nom du fichier csv
+  dans lequel on veut écrire)
+- importer le fichier dans Label-Studio, choisir la période et exporter le fichier project* au format csv
+- executer le script faittout.sh (appeler le fichier label.py argv1 argv2 (argv1 = le fichier csv à labeliser, argv2 = le fichier project*)
+, mettre le fichier dans le folder NotFall)
+- faire ca pour toutes les actions
+- appeler main.py qui stocke dans raw_data.txt les données brut de tout les windows de toutes les actions
+  et crée 2 autres fichiers features.txt qui contient toutes les features normalisées et label.txt qui contient
+  les labels de chaque window
+
+- dans label Studio 0 = NotFall et 1 = Fall

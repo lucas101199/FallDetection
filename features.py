@@ -51,9 +51,9 @@ def GetFeatures(x, y, z):
     features += str(np.median(xcor)) + ' '
     features += str(np.median(ycor)) + ' '
     features += str(np.median(zcor)) + ' '
-    features += str(entropy(x)) + ' '
-    features += str(entropy(y)) + ' '
-    features += str(entropy(z)) + ' '
+    features += str(entropy(x)) + ' '  # -inf in features.txt
+    features += str(entropy(y)) + ' '  # -inf in features.txt
+    features += str(entropy(z)) + ' '  # -inf in features.txt
     features += str(energy(x)) + ' '
     features += str(energy(y)) + ' '
     features += str(energy(z)) + ' '
@@ -69,8 +69,8 @@ def GetFeatures(x, y, z):
 
 def WriteFeatures(filename):
     file = open(filename, 'r')
-    feature_file = open('features.txt', 'a+')
-    label_file = open('label.txt', 'a+')
+    feature_file = open('features.txt', 'w')
+    label_file = open('label.txt', 'w')
     lines = file.readlines()
     for line in lines:
         line_split = line.split(' ')
