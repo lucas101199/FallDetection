@@ -25,7 +25,6 @@ allfilesNotFall = [f for f in listdir(folder) if isfile(join(folder, f))]
 allfilesFall = [f for f in listdir('Fall') if isfile(join('Fall', f))]
 filetxt = 'raw_data.txt'
 allfiles = allfilesFall + allfilesNotFall
-print(len(allfiles))
 for file in allfiles:
     if 'tomber' in file:
         df = ChangeData(join('Fall', file), 3)  # preprocess

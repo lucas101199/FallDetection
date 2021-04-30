@@ -12,7 +12,7 @@ def WriteData(data, label):
     for i in range(len(data)):
         for j in range(3):
             line += str(data[i][j]) + ' '
-    line += str(label[0]) + '\n'
+    line += str(int(label[0])) + '\n'
     file.write(line)
 
 

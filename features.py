@@ -74,13 +74,13 @@ def WriteFeatures(filename):
     lines = file.readlines()
     for line in lines:
         line_split = line.split(' ')
-        label = line_split[-1]
+        label = int(line_split[-1])
         line_split = line_split[:-1]
         x = list(map(float, line_split[::3]))
         y = list(map(float, line_split[1::3]))
         z = list(map(float, line_split[2::3]))
         feature_file.write(GetFeatures(x, y, z))
-        label_file.write(label)
+        label_file.write(str(label) + '\n')
     feature_file.close()
     label_file.close()
     file.close()
