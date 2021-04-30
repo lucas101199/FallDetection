@@ -31,14 +31,14 @@ def createHeader(sensorList, ftList,t_stamp):
     final[0 + dif].append('Trial')
     final[0 + dif].append('Tag')
     return final,dif
-
+'''
 #Function used to extract data from a specific sensor and return it as a list
 def extractSensor(location,temp):
     sensorData = []
     for row in temp:
         sensorData.append(row[location])
     return sensorData
-
+'''
 #Function used to extract and return time from sepcific row        
 def getTime(row):
     year = int(row[0][0:4])
@@ -59,7 +59,7 @@ def features(datafile,finaloc,sub,act,trl,actn,twnd,t_stamp = False):
     st1 = float(tlen[0])
     st2 = float(tlen[1])
     #Opens a csv file and puts it into an array 
-    csvFile = open(datafile)
+    csvFile = open('dataBrut.csv')
     csvArray = []
     for row in csvFile:
         row = row.split(',')

@@ -4,7 +4,7 @@ import os
 from fCalculation import tdom, fdom
 from statistics import mode
 from statistics import StatisticsError
-from ftFunctions import createHeader, extractSensor, getTime, features, featureJoiner
+from ftFunctions import createHeader, getTime, features, featureJoiner
 
 #Will run through subjects,activities,and trials inputted
 def extraction(d_base_path,features_path,
