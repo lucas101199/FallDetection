@@ -21,12 +21,18 @@ def normalizeData(file):
 
 
 folder = 'NotFall'
-allfiles = [f for f in listdir(folder) if isfile(join(folder, f))]
+allfilesNotFall = [f for f in listdir(folder) if isfile(join(folder, f))]
+allfilesFall = [f for f in listdir('Fall') if isfile(join('Fall', f))]
 filetxt = 'raw_data.txt'
-print(allfiles)
+allfiles = allfilesFall + allfilesNotFall
+print(len(allfiles))
 for file in allfiles:
-    df = ChangeData(join(folder, file), 3)  # preprocess
-    sliding_window(df, 2)  # segmentation
+    if 'tomber' in file:
+        df = ChangeData(join('Fall', file), 3)  # preprocess
+        sliding_window(df, 2)  # segmentation
+    else:
+        df = ChangeData(join('NotFall', file), 3)  # preprocess
+        sliding_window(df, 2)  # segmentation
 
 WriteFeatures(filetxt)  # features extraction
 norm_Data = normalizeData('features.txt')
