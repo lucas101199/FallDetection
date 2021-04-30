@@ -5,7 +5,7 @@ from scipy.stats import entropy, iqr, median_abs_deviation
 
 # Sum of the squares divided by the number of values
 def energy(val):
-    return st.mean([val[i]**2 for i in range(len(val))])
+    return st.mean([val[i] ** 2 for i in range(len(val))])
 
 
 def sma(x, y, z):
@@ -20,9 +20,9 @@ def GetFeatures(x, y, z):
     yrms = 0
     zrms = 0
     for i in range(len(x)):
-        xrms += x[i]**2
-        yrms += y[i]**2
-        zrms += z[i]**2
+        xrms += x[i] ** 2
+        yrms += y[i] ** 2
+        zrms += z[i] ** 2
     xcor = np.correlate(x, y, mode='full')
     ycor = np.correlate(y, z, mode='full')
     zcor = np.correlate(z, x, mode='full')
@@ -51,9 +51,9 @@ def GetFeatures(x, y, z):
     features += str(np.median(xcor)) + ' '
     features += str(np.median(ycor)) + ' '
     features += str(np.median(zcor)) + ' '
-    features += str(entropy(x)) + ' '  # -inf in features.txt
-    features += str(entropy(y)) + ' '  # -inf in features.txt
-    features += str(entropy(z)) + ' '  # -inf in features.txt
+    # features += str(entropy(x)) + ' '  # -inf in features.txt
+    # features += str(entropy(y)) + ' '  # -inf in features.txt
+    # features += str(entropy(z)) + ' '  # -inf in features.txt
     features += str(energy(x)) + ' '
     features += str(energy(y)) + ' '
     features += str(energy(z)) + ' '
