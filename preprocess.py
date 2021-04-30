@@ -48,7 +48,7 @@ def ChangeData(file, kernel_size):
     return pd.DataFrame(new_df_dict)
 
 
-df = pd.read_csv('balais_4_L.csv')
+df = pd.read_csv('tomber_3_R.csv')
 data = df.drop(['TimeStamp'], axis=1).values
-plot_lines(data, 50, 'balais')
+plot3D(data, 'balais')
 plt.show()
