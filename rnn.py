@@ -1,6 +1,7 @@
-
 import math
 import numpy as np
+
+"""
 import pandas as pd
 import tensorflow as tf
 from keras import Sequential
@@ -16,12 +17,11 @@ from sklearn.metrics import confusion_matrix
 from sklearn import preprocessing
 import matplotlib.pyplot as plt
 
-
 # Create a dataset from a DataFrame of size [samples, timesteps, features] and size [samples, action] for the label
 def CreateDataset(TimeSteps, df):
     size = math.ceil(len(df) / TimeSteps)
-    features = np.empty([size, TimeSteps, 9])
-    j = 0
+        features = np.empty([size, TimeSteps, 9])
+        j = 0
     label = []
     for i in range(0, len(df), TimeSteps):
         features[j] = df.loc[i:i + TimeSteps - 1,
@@ -31,12 +31,38 @@ def CreateDataset(TimeSteps, df):
         label.append(action)
         j += 1
     return features, label
+"""
 
 
-df = pd.read_csv('AllData.csv', sep=',', header=0)
+def extractLabel(lines):
+    label = []
+    for line in lines:
+        label.append(line[-2])
+    return label
 
-features, label = CreateDataset(100, df)
-label = np.array(label)
+
+def extractData(lines):
+    data = []
+    for line in lines:
+        array = []
+        xyz = []
+        linesplit = line.split(' ')
+        for i in range(len(linesplit)):
+            if len(xyz) == 3:
+                array.append(xyz)
+                xyz = []
+            xyz.append(linesplit[i])
+        data.append(array)
+    return data
+
+
+df = open('raw_data.txt', 'r')
+lines = df.readlines()
+lines = np.array(lines)
+label = np.array(extractLabel(lines)).reshape(len(lines), 1)
+data = np.array(extractData(lines))
+
+"""
 label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (3540,) to [samples, label] (3540,1)
 
 # Encode the label
@@ -98,3 +124,4 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 plt.plot.savefig("loss.png")
+"""
