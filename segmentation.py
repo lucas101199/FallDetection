@@ -24,6 +24,3 @@ def sliding_window(df, time):
             label = data[:, 4]
             data = data[:, 1:4]
             WriteData(data, label)
-
-
-# 192.168.0.41

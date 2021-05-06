@@ -1,6 +1,6 @@
 import numpy as np
 import statistics as st
-from scipy.stats import entropy, iqr, median_abs_deviation
+from scipy.stats import iqr, median_abs_deviation
 
 
 # Sum of the squares divided by the number of values
@@ -45,9 +45,9 @@ def GetFeatures(x, y, z):
     features += str(np.median(np.array(x))) + ' '
     features += str(np.median(np.array(y))) + ' '
     features += str(np.median(np.array(z))) + ' '
-    features += str((np.sqrt(xrms) / np.sqrt(len(x)))) + ' '
-    features += str((np.sqrt(yrms) / np.sqrt(len(y)))) + ' '
-    features += str((np.sqrt(zrms) / np.sqrt(len(z)))) + ' '
+    features += str(np.sqrt(xrms / len(x))) + ' '
+    features += str(np.sqrt(yrms / len(y))) + ' '
+    features += str(np.sqrt(zrms / len(z))) + ' '
     features += str(np.median(xcor)) + ' '
     features += str(np.median(ycor)) + ' '
     features += str(np.median(zcor)) + ' '
