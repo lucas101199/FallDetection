@@ -48,7 +48,7 @@ def evaluation(model):
   acc = accuracy_score(y_test,y_pred)
   print(acc)
   print(classification_report(y_test, ypred))
-    
+  
     
   plt.figure(figsize=(12, 8))
   plt.plot(N, train_score.mean(axis=1), label='train score')
