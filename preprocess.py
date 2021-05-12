@@ -4,12 +4,12 @@ from matplotlib import pyplot as plt
 from scipy import signal
 
 
-def median_filter(data, f_size):
-    lgth, num_signal = data.shape
-    f_data = np.zeros([lgth, num_signal])
-    for i in range(num_signal):
-        f_data[:, i] = signal.medfilt(data[:, i], f_size)
-    return f_data
+# def median_filter(data, f_size):
+#     lgth, num_signal = data.shape
+#     f_data = np.zeros([lgth, num_signal])
+#     for i in range(num_signal):
+#         f_data[:, i] = signal.medfilt(data[:, i], f_size)
+#     return f_data
 
 
 def plot_lines(data, fs, title):
@@ -42,7 +42,7 @@ def ChangeData(file, kernel_size):
     x = df.drop(['TimeStamp'], axis=1).values
     timestamp = df.loc[:, 'TimeStamp'].values
     label = df.loc[:, 'Class'].values
-    median_data = median_filter(x, kernel_size)
-    new_df_dict = {'TimeStamp': timestamp, 'X-Axis': median_data[:, 0], 'Y-Axis': median_data[:, 1],
-                   'Z-Axis': median_data[:, 2], 'Class': label}
+    # median_data = median_filter(x, kernel_size)
+    new_df_dict = {'TimeStamp': timestamp, 'X-Axis': x[:, 0], 'Y-Axis': x[:, 1],
+                   'Z-Axis': x[:, 2], 'Class': label}
     return pd.DataFrame(new_df_dict)

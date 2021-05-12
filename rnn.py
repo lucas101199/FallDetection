@@ -1,19 +1,8 @@
-import math
 import numpy as np
-import pandas as pd
 import tensorflow as tf
 from keras import Sequential
-from keras.layers import LSTM, Dropout, Dense, Bidirectional
-from keras.utils.np_utils import to_categorical
-from keras.layers import TimeDistributed
-from keras.layers.convolutional import Conv1D
-from keras.layers.convolutional import MaxPooling1D
+from keras.layers import LSTM, Dense, Bidirectional
 from sklearn.model_selection import train_test_split
-from keras.layers import Flatten
-from tensorflow.keras.layers.experimental import preprocessing
-from sklearn.metrics import confusion_matrix
-from sklearn import preprocessing
-import matplotlib.pyplot as plt
 
 """
 # Create a dataset from a DataFrame of size [samples, timesteps, features] and size [samples, action] for the label
@@ -60,8 +49,19 @@ lines = df.readlines()
 lines = np.array(lines)
 label = np.array(extractLabel(lines)).reshape(len(lines), 1)
 data = np.array(extractData(lines))
+pos = 0
+neg = 0
 
-# label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (3540,) to [samples, label] (3540,1)
+for i in range(label.shape[0]):
+    if label[i][0] == 0:
+        neg += 1
+    else:
+        pos += 1
+
+    # label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (3540,) to [samples, label] (3540,1)
+weight0 = (1 / neg) * (neg + pos) / 2.0
+weight1 = (1 / pos) * (neg + pos) / 2.0
+class_weight = {0: weight0, 1: weight1}
 
 # Encode the label
 # le = preprocessing.LabelEncoder()
@@ -80,16 +80,23 @@ y_test = y_test - 1
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 """
+initial_bias = np.log([pos/neg])
+initial_bias = tf.keras.initializers.Constant(initial_bias)
 # le model de la machine ss
 model = Sequential()
 model.add(LSTM(100, input_shape=(200, 3), return_sequences=True))
 model.add(Bidirectional(LSTM(32)))
-model.add(Dense(1, activation='sigmoid'))
+model.add(Dense(1, activation='sigmoid', bias_initializer=initial_bias))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
 # model.fit(X_train, y_train, epochs=20, batch_size=40)
 # modification of fit model
-history = model.fit(X_train, y_train, epochs=20, batch_size=4)
+history = model.fit(X_train, y_train, epochs=20, batch_size=4, class_weight=class_weight)
+model.save('saved_model/mlp')
+converter = tf.lite.TFLiteConverter.from_saved_model('saved_model/mlp')
+tflite_model = converter.convert()
+with open('model.tflite', 'wb') as f:
+    f.write(tflite_model)
 
 # model.fit(X_train, y_train, epochs=20, batch_size=4)
 

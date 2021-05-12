@@ -11,7 +11,7 @@ def WriteData(data, label):
     line = ''
     for i in range(len(data)):
         for j in range(3):
-            line += str(data[i][j]) + ' '
+            line += str(round(data[i][j], 3)) + ' '
     line += str(int(label[0])) + '\n'
     file.write(line)
 

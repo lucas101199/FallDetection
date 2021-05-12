@@ -136,7 +136,7 @@ model.fit(features3d, labels, epochs=2, batch_size=64)
 #loss_and_metrics = model.evaluate(features3d, labels, batch_size=128)
 
 #prediction sur de données nouvelles
-#classes = model.predict(x_test, batch_size=128)
+#classes = mode128)
 
 print(model.summary())
 print(len(model.layers))
