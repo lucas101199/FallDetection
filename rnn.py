@@ -3,6 +3,7 @@ import tensorflow as tf
 from keras import Sequential
 from keras.layers import LSTM, Dense, Bidirectional
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report, confusion_matrix
 
 """
 # Create a dataset from a DataFrame of size [samples, timesteps, features] and size [samples, action] for the label
@@ -61,7 +62,7 @@ for i in range(label.shape[0]):
     # label = np.reshape(label, (label.size, 1))  # reshape the array from [label] (3540,) to [samples, label] (3540,1)
 weight0 = (1 / neg) * (neg + pos) / 2.0
 weight1 = (1 / pos) * (neg + pos) / 2.0
-class_weight = {0: weight0, 1: weight1}
+class_weight = {0: weight0, 1: (weight1 / 4)}
 
 # Encode the label
 # le = preprocessing.LabelEncoder()
@@ -80,8 +81,9 @@ y_test = y_test - 1
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 """
-initial_bias = np.log([pos/neg])
+initial_bias = -10  #np.log([pos/neg])
 initial_bias = tf.keras.initializers.Constant(initial_bias)
+print(initial_bias.value)
 # le model de la machine ss
 model = Sequential()
 model.add(LSTM(100, input_shape=(200, 3), return_sequences=True))
@@ -101,7 +103,9 @@ with open('model.tflite', 'wb') as f:
 # model.fit(X_train, y_train, epochs=20, batch_size=4)
 
 model.evaluate(X_test, y_test, batch_size=2)
-
+ypred = model.predict_classes(X_test, batch_size=2)
+yp = np.argmax(ypred, axis=1)
+print(confusion_matrix(y_test, ypred))
 # list all data in history
 # print(history.history.keys())
 """
