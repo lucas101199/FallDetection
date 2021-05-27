@@ -69,8 +69,8 @@ def GetFeatures(x, y, z):
 
 def WriteFeatures(filename):
     file = open(filename, 'r')
-    feature_file = open('features.txt', 'w')
-    label_file = open('label.txt', 'w')
+    feature_file = open('featurest.txt', 'w')
+    label_file = open('labelt.txt', 'w')
     lines = file.readlines()
     for line in lines:
         line_split = line.split(' ')

@@ -23,16 +23,16 @@ def normalizeData(file):
 folder = 'NotFall'
 allfilesNotFall = [f for f in listdir(folder) if isfile(join(folder, f))]
 allfilesFall = [f for f in listdir('Fall') if isfile(join('Fall', f))]
-filetxt = 'raw_data.txt'
+filetxt = 'noise.txt'
 allfiles = allfilesFall + allfilesNotFall
-for file in allfiles:
-    if 'tomber' in file:
-        df = ChangeData(join('Fall', file), 3)  # preprocess
-        sliding_window(df, 2)  # segmentation
-    else:
-        df = ChangeData(join('NotFall', file), 3)  # preprocess
-        sliding_window(df, 2)  # segmentation
+# for file in allfiles:
+#     if 'tomber' in file:
+#         df = ChangeData(join('Fall', file), 3)  # preprocess
+#         sliding_window(df, 2)  # segmentation
+#     else:
+#         df = ChangeData(join('NotFall', file), 3)  # preprocess
+#         sliding_window(df, 2)  # segmentation
 
 WriteFeatures(filetxt)  # features extraction
-norm_Data = normalizeData('features.txt')
-np.savetxt('features_norm.txt', norm_Data, fmt='%1.4e')
+norm_Data = normalizeData('featurest.txt')
+np.savetxt('features_normt.txt', norm_Data, fmt='%1.4e')

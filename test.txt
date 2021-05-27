@@ -1,0 +1,9 @@
+Marcher : 10
+balais : 10
+eponge horizontale : 10
+eponge verticale : 10
+tomber : 64
+
+refaire chute 18
+
+73 L (L23 - 50S)
