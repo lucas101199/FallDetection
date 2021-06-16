@@ -3,13 +3,17 @@ from os.path import isfile, join
 
 import numpy as np
 import tensorflow as tf
+import os
 from keras import Sequential
 from keras.layers import LSTM, Dense, Bidirectional
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
+from tensorflow import keras
 from tflite_support import flatbuffers
 from tflite_support import metadata as _metadata
 from tflite_support import metadata_schema_py_generated as _metadata_fb
+from keras import backend as K
+import keras
 
 
 """
@@ -82,7 +86,7 @@ class_weight = {0: weight0, 1: (weight1 / 4)}
 # label = le.fit_transform(label)
 
 # Split the dataset between train and test
-# X_train, X_test, y_train, y_test = train_test_split(data, label, test_size=0, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(data, label, test_size=0.3, random_state=42)
 
 # show the size of each cut
 # print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
@@ -94,7 +98,8 @@ y_test = y_test - 1
 y_train = to_categorical(y_train)
 y_test = to_categorical(y_test)
 """
-learning_rate = 0.0025
+
+optimizer = tf.keras.optimizers.Adam(learning_rate=0.0025)
 initial_bias = -10  #np.log([pos/neg])
 initial_bias = tf.keras.initializers.Constant(initial_bias)
 print(initial_bias.value)
@@ -103,78 +108,99 @@ model = Sequential()
 model.add(LSTM(100, input_shape=(200, 3), return_sequences=True, name='input'))
 model.add(Bidirectional(LSTM(32)))
 model.add(Dense(1, activation='sigmoid', bias_initializer=initial_bias, name='output'))
-model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
 # model.fit(X_train, y_train, epochs=20, batch_size=40)
 # modification of fit model
-history = model.fit(data, label, epochs=20, batch_size=4, class_weight=class_weight)
+history = model.fit(X_train, y_train, epochs=10, batch_size=4, class_weight=class_weight)
+model.save("rnn.h5")
 predi = model.predict(np.array(dataset))
 print(predi)
+# test_loss, test_acc = model.evaluate(X_test, y_test, batch_size=2)
+# print(test_loss)
+# print(test_acc)
 
-files = [f for f in listdir('FallUser/Fall/') if isfile(join('FallUser/Fall/', f))]
-for f in files:
-    df = open(join('FallUser/Fall', f), 'r')
-    lines = df.readline()
-    dataset = lines.split(' ')[:-1]
-    dataset = [float(x) for x in dataset]
-    if len(dataset) == 600:
-        dataset = np.array(dataset).reshape(1, 200, 3)
-        print(model.predict_proba(np.array(dataset)))
+# files = [f for f in listdir('FallUser/Fall/') if isfile(join('FallUser/Fall/', f))]
+# for f in files:
+#     df = open(join('FallUser/Fall', f), 'r')
+#     lines = df.readline()
+#     dataset = lines.split(' ')[:-1]
+#     dataset = [float(x) for x in dataset]
+#     if len(dataset) == 600:
+#         dataset = np.array(dataset).reshape(1, 200, 3)
+#         print(model.predict_proba(np.array(dataset)))
 
-run_model = tf.function(lambda x: model(x))
-BATCH_SIZE = 1
-STEPS = 200
-INPUT_SIZE = 3
-concrete_func = run_model.get_concrete_function(
-    tf.TensorSpec([BATCH_SIZE, STEPS, INPUT_SIZE], model.inputs[0].dtype))
-
-# model directory.
-MODEL_DIR = "saved_model"
-model.save(MODEL_DIR, save_format="tf", signatures=concrete_func)
-
-converter = tf.lite.TFLiteConverter.from_saved_model(MODEL_DIR)
-tflite_model = converter.convert()
-with open('model.tflite', 'wb') as f:
-    f.write(tflite_model)
-
-model_meta = _metadata_fb.ModelMetadataT()
-model_meta.name = "Fall detection RNN"
-input_meta = _metadata_fb.TensorMetadataT()
-output_meta = _metadata_fb.TensorMetadataT()
-
-input_meta.name = "time window"
-input_meta.content = _metadata_fb.ContentT()
-input_meta.content.contentProperties = _metadata_fb.FeaturePropertiesT()
-input_stats = _metadata_fb.StatsT()
-input_stats.max = [10]
-input_stats.min = [-10]
-input_meta.stats = input_stats
-
-output_meta.name = "probability"
-output_meta.description = "Probabilities of falling."
-output_meta.content = _metadata_fb.ContentT()
-output_meta.content.content_properties = _metadata_fb.FeaturePropertiesT()
-output_meta.content.contentPropertiesType = _metadata_fb.ContentProperties.FeatureProperties
-output_stats = _metadata_fb.StatsT()
-output_stats.max = [1.0]
-output_stats.min = [0.0]
-output_meta.stats = output_stats
-
-subgraph = _metadata_fb.SubGraphMetadataT()
-subgraph.inputTensorMetadata = [input_meta]
-subgraph.outputTensorMetadata = [output_meta]
-model_meta.subgraphMetadata = [subgraph]
-
-b = flatbuffers.Builder(0)
-b.Finish(
-    model_meta.Pack(b),
-    _metadata.MetadataPopulator.METADATA_FILE_IDENTIFIER)
-metadata_buf = b.Output()
-
-populator = _metadata.MetadataPopulator.with_model_file('model.tflite')
-populator.load_metadata_buffer(metadata_buf)
-populator.load_associated_files(["Labels.txt"])
-populator.populate()
+# implementation tf lite
+# run_model = tf.function(lambda x: model(x))
+# BATCH_SIZE = 1
+# STEPS = 200
+# INPUT_SIZE = 3
+# concrete_func = run_model.get_concrete_function(
+#     tf.TensorSpec([BATCH_SIZE, STEPS, INPUT_SIZE], model.inputs[0].dtype))
+#
+# # model directory.
+# MODEL_DIR = "saved_model"
+# model.save(MODEL_DIR, save_format="tf", signatures=concrete_func)
+#
+# converter = tf.lite.TFLiteConverter.from_saved_model(MODEL_DIR)
+# tflite_model = converter.convert()
+# with open('model.tflite', 'wb') as f:
+#     f.write(tflite_model)
+#
+# # Load TFLite model and allocate tensors.
+# interpreter = tf.lite.Interpreter(model_path="model.tflite")
+# interpreter.allocate_tensors()
+#
+# # Get input and output tensors.
+# input_details = interpreter.get_input_details()
+# output_details = interpreter.get_output_details()
+#
+# input_shape = input_details[0]['shape']
+# print('input size should be:', input_shape)
+# input_data = np.array(dataset, dtype=np.float32)
+# # input_data = np.array(np.random.random_sample(input_shape), dtype=np.float32)
+# interpreter.set_tensor(input_details[0]['index'], input_data)
+# interpreter.invoke()
+# output_data = interpreter.get_tensor(output_details[0]['index'])
+# print('the output is:', output_data, 'with size of', output_data.shape)
+# model_meta = _metadata_fb.ModelMetadataT()
+# model_meta.name = "Fall detection RNN"
+# input_meta = _metadata_fb.TensorMetadataT()
+# output_meta = _metadata_fb.TensorMetadataT()
+#
+# input_meta.name = "time window"
+# input_meta.content = _metadata_fb.ContentT()
+# input_meta.content.contentProperties = _metadata_fb.FeaturePropertiesT()
+# input_stats = _metadata_fb.StatsT()
+# input_stats.max = [10]
+# input_stats.min = [-10]
+# input_meta.stats = input_stats
+#
+# output_meta.name = "probability"
+# output_meta.description = "Probabilities of falling."
+# output_meta.content = _metadata_fb.ContentT()
+# output_meta.content.content_properties = _metadata_fb.FeaturePropertiesT()
+# output_meta.content.contentPropertiesType = _metadata_fb.ContentProperties.FeatureProperties
+# output_stats = _metadata_fb.StatsT()
+# output_stats.max = [1.0]
+# output_stats.min = [0.0]
+# output_meta.stats = output_stats
+#
+# subgraph = _metadata_fb.SubGraphMetadataT()
+# subgraph.inputTensorMetadata = [input_meta]
+# subgraph.outputTensorMetadata = [output_meta]
+# model_meta.subgraphMetadata = [subgraph]
+#
+# b = flatbuffers.Builder(0)
+# b.Finish(
+#     model_meta.Pack(b),
+#     _metadata.MetadataPopulator.METADATA_FILE_IDENTIFIER)
+# metadata_buf = b.Output()
+#
+# populator = _metadata.MetadataPopulator.with_model_file('model.tflite')
+# populator.load_metadata_buffer(metadata_buf)
+# populator.load_associated_files(["Labels.txt"])
+# populator.populate()
 
 #
 # # model.fit(X_train, y_train, epochs=20, batch_size=4)
